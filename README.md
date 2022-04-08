@@ -9,7 +9,11 @@ This software is effectively a Monte Carlo Machine in its own right as it predic
 
 To run this software, instructions are provided below on related modules/imports to download along with the use of commands to navigate on Linux if you wish to run the simulation 24/7 on an Ubuntu instance using G-cloud (removes susceptibility of spontaneous loss of connection to API) i.e. internet connection down/power cut. 
 
-If you do not wish to run 24/7, its simply a matter of cloning this repository; copy and pasting the directory name of the file over to your CLI and running python main.py and main2.py where main.py is the UI and main2.py is the trading bot. This is with the notion you already have python installed on your local machine. 
+If you do not wish to run 24/7, its simply a matter of cloning this repository; copy and pasting the directory name of the file over to your CLI and running: 
+- python main.py 
+- main2.py
+
+, where main.py is the UI and main2.py is the trading bot. This is with the notion you already have python installed on your local machine. 
 
 If you wish to adapt upon this software for your own personal use. You're re more than welcome to.
 
