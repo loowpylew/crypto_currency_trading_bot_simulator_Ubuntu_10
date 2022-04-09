@@ -78,13 +78,11 @@ From your shell, install Git using apt-get:
 
 sudo apt-get update 
 
-sudo apt-get install git.
+sudo apt-get install git
 
 **### Verify the installation was successful by typing:** 
 
-git --version : 
-
-$ git --version git version 2.9.2.
+git --version 
 
 **### How to install python 3.10 on Ubuntu server:** 
 https://phoenixnap.com/kb/how-to-install-python-3-ubuntu
