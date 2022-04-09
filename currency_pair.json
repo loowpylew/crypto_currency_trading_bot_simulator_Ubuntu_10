@@ -1,4 +1,4 @@
 {
-    "Crypto_SYM": "XETH",
-    "Real_Tend_SYM": "ZUSD"
+    "Crypto_SYM": "no_initialization",
+    "Real_Tend_SYM": "no_initialization"
 }

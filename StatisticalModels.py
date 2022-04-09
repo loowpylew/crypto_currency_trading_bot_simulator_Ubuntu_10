@@ -1,8 +1,7 @@
 import statistics
 import pandas as pd
 import matplotlib.pyplot as plt
-import time 
-# Used to call pre-written functions i.e. stdev() which can be used to calculate the standard deviation.
+import numpy as np 
 
 
 def calcSimpleMovingAverage(data): 
@@ -60,17 +59,6 @@ def calcBollingerBands(data, crypto_symbol, real_tender):
 
     pricesOfCrypto.insert(9, 10, upperbound) # where 10 is the upperbound 
     pricesOfCrypto.insert(10, 11, lowerbound) # and 11 is the lower bound
-
-    #pricesOfCrypto[[4, 8, 10, 11]].plot(figsize=(10,6))
-    
-    #plt.grid(True)
-    #plt.title(crypto_symbol + "vs" + real_tender + "Bollinger Bands")
-    #plt.axis('tight')
-    #plt.xlabel('no. of data point (60 closing prices per hour)')
-    #plt.ylabel('Price')
-    #plt.savefig('ANTvsUSD.png')
-    #plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
-
 
     #print(pricesOfCrypto.iloc[0:, 0:1])
     #print(pricesOfCrypto.iloc[0:, 4:5])
@@ -153,3 +141,158 @@ def store_upper_and_lower_bounds(data):
     #time.sleep(0.5) # Put in place to prevent 'float' object from being non-subscriptable
 
     return arrayify
+
+
+# Technical Indicators used as Features to predict reliance of indicators used in trading strategy. 
+def calc_indicators(data): 
+    #[open, high, low, close]
+    #dataset[[1, 2, 3, 4]]  
+    dataset = pd.DataFrame.from_dict(data)
+    #dataset = dataset.dropna() # removes rows containing null values 
+
+    dataset = dataset.dropna()
+
+    open_ = pd.to_numeric(dataset[1])
+    high_ = pd.to_numeric(dataset[2])
+    low_ = pd.to_numeric(dataset[3])
+    close_ = pd.to_numeric(dataset[4])
+    
+    # The first thing to notice is that by default rolling looks for n-1 prior rows of data to aggregate,
+    # where n is the window size. If that condition is not met, it will return NaN for the window. This is
+    # what's happening at the first row. In the fourth and fifth row, it's because one of the values in the sum is NaN.
+
+    # If you would like to avoid returning NaN, you could pass min_periods=1 to the method which reduces the minimum 
+    # required number of valid observations in the window to 1 instead of 2
+ 
+    dataset['H-L'] = high_ - low_
+    dataset['O-C'] = open_ - close_
+    dataset['ma'] = close_.rolling(2, min_periods=1).mean()
+    dataset['std'] = close_.rolling(window=2).std().fillna(method='bfill').fillna(method='ffill')
+    dataset['Price_Rise'] = np.where(close_.shift(-1) > close_, 1, 0)
+
+    upperbound = dataset['ma'] + (dataset['std'] * 2)
+    lowerbound = dataset['ma'] - (dataset['std'] * 2)
+
+    dataset['Upperbound'] = upperbound
+    dataset['Lowerbound'] = lowerbound
+
+    #print(dataset)
+
+    return dataset
+
+
+def graph_representations_of_indicators(data): 
+
+    dataset = calc_indicators(data)
+    
+    open_ = pd.to_numeric(dataset[1])
+    high_ = pd.to_numeric(dataset[2])
+    low_ = pd.to_numeric(dataset[3])
+    close_ = pd.to_numeric(dataset[4])
+
+    
+    # High vs Low in relation to Close
+    close_, low_, high_.plot(figsize=(10,6))
+
+    plt.grid(True)
+    plt.title("High vs Low in relation to Closing price")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/High_VS_Low_in_relation_to_Close.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+
+    # Open vs Close
+    open_, close_.plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("Open price vs Closing price")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/Open_vs_Close.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # High - Low in relation to Close
+    dataset[['H-L']].plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("High Price vs Low Price")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/High-Low_in_relation_to_Close.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # Open - Close in relation to Close
+    dataset[['O-C']].plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("Open Price vs Close Price")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/Open-Close_in_relation_to_Close.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # OHLC all in one graph 
+    open_, high_, low_, close_.plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("OHLC")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/OHLC.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # Moving Average 
+    dataset[['ma']].plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("Moving Average")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/ma.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # Standard Deviation
+    dataset[['std']].plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("Standard deviation")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/std.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # Price Rise 
+    dataset[['Price_Rise']].plot(figsize=(10,6))
+    plt.grid(True)
+    plt.title("Price Rise")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/Price_Rise.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # Upper bound VS Lower Bound along with the mean price
+    dataset[['ma', 'Upperbound', 'Lowerbound']].plot()
+    plt.grid(True)
+    plt.title("Bollinger Bands")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/Bollinger_Bands.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+    # All indicators in one graph 
+    open_, high_, low_, close_.plot(figsize=(10,6))
+    dataset[['ma', 'std', 'H-L', 'O-C', 'Price_Rise', 'Upperbound', 'Lowerbound']].plot()
+    plt.grid(True)
+    plt.title("All indicators in one")
+    plt.axis('tight')
+    plt.xlabel('no. of data point (60 closing prices per hour)')
+    plt.ylabel('Price')
+    plt.savefig('graphical_representations/All_indicators.png')
+    plt.close() # Reduce the number of plts opened. Reduce memory usage (kbytes)
+
+
+

@@ -38,7 +38,7 @@ def printCurrentState(open_, close_, simple_Moving_Average, standard_deviation, 
     print(f"{c.bcolors.HACKER_GREEN}Current closing price: {c.bcolors.ENDC}", close_)
     print(f"{c.bcolors.HACKER_GREEN}Simple moving average: {c.bcolors.ENDC}", simple_Moving_Average)
     print(f"{c.bcolors.HACKER_GREEN}Standard Deviation: {c.bcolors.ENDC}", standard_deviation)
-    print(f"{c.bcolors.HACKER_GREEN}Bollinger Bands: [{c.bcolors.ENDC}upperbounds{c.bcolors.HACKER_GREEN}]: {c.bcolors.ENDC}" + bollinger_bands[0] + f" [{c.bcolors.HACKER_GREEN}lowerbounds{c.bcolors.ENDC}]{c.bcolors.HACKER_GREEN}: {c.bcolors.ENDC}" + bollinger_bands[1])
+    print(f"{c.bcolors.HACKER_GREEN}Bollinger Bands: [{c.bcolors.ENDC}upperbounds{c.bcolors.HACKER_GREEN}]: {c.bcolors.ENDC}" + bollinger_bands[0] + f" {c.bcolors.HACKER_GREEN}[{c.bcolors.ENDC}lowerbounds{c.bcolors.HACKER_GREEN}]: {c.bcolors.ENDC}" + bollinger_bands[1])
     print(f"{c.bcolors.HACKER_GREEN}If negative, means a decrease; if postive, means an increase in the price since the last sale")
     print(f"{c.bcolors.HACKER_GREEN}Percentage Difference is: {c.bcolors.ENDC}{str(percentage_Increase)}%{c.bcolors.HACKER_GREEN} since last analysis, trying again...")
     #print("Available", pair[0], ": ", available_crypto)
@@ -86,9 +86,8 @@ def analyze(pair, since, PRICE_THRESHOLD, STOP_LOSS, api, loop_cycle):
     percentage_threshold_equivilant = (PRICE_THRESHOLD / open_) * 100
     percentage_stop_loss_equivilant = (STOP_LOSS / open_) * 100    
     
-    #print(percentage_threshold_equivilant)
-    #print(percentage_stop_loss_equivilant)
-    #print("\n")
+    #Used to create graphs of trading environemnt from however long back the timestamp has been set
+    #sms.graph_representations_of_indicators(data)
 
     available_crypto = float(balance[pair[0]])
     available_money = float(balance[pair[1]])
