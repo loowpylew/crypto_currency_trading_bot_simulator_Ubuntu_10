@@ -2,7 +2,6 @@
 
 # Crypto_currency_trading_bots
 
-
 For whoever may wish to experiment with crypto currency pairs without having to invest real money, I hope you find this software useful. 
 
 This software is effectively a Monte Carlo Machine in its own right as it predicts outcomes as a result of random intervention of variables i.e. changes in the price of a giving currecny pair (OHLC). This software encompasses a user interface (UI) along with a trading bot that works in repsonse to one another based off the users actions i.e. making deposits, changing STOP LOSS/PRICE THRSHOLD, restarting/ending the trading simulation, setting timestamp (used to POST to the KRAKEN API to recieve back historical data dating back a given period of time) and so forth. Along with these, the user can view live top 100 most volatile crypto currencies to use as indictor to gauge which crypto to experiment with. The user can also view account holdings and trades history along with a help menu that can be accessed to educate the user/use as a reminder on what various indicators mean/indicate. 
@@ -10,8 +9,8 @@ This software is effectively a Monte Carlo Machine in its own right as it predic
 To run this software, instructions are provided below on related modules/imports to download along with the use of commands to navigate on Linux if you wish to run the simulation 24/7 on an Ubuntu instance using G-cloud (removes susceptibility of spontaneous loss of connection to API) i.e. internet connection down/power cut. 
 
 If you do not wish to run 24/7, its simply a matter of cloning this repository; copy and pasting the directory name of the file over to your CLI and running: 
-- python main.py 
-- main2.py
+- python3 main.py 
+- python3 main2.py
 
 , where main.py is the UI and main2.py is the trading bot. This is with the notion you already have python installed on your local machine. 
 
@@ -78,16 +77,13 @@ From your shell, install Git using apt-get:
 
 sudo apt-get update 
 
-sudo apt-get install git.
+sudo apt-get install git
 
 **### Verify the installation was successful by typing:** 
 
-git --version : 
+git --version 
 
-$ git --version git version 2.9.2.
-
-**### How to install python 3.10 on Ubuntu server:** 
-https://phoenixnap.com/kb/how-to-install-python-3-ubuntu
+**### Python3.7.1 is already installed on the ubuntu instance as does not allow for any upgraded versions to be installed** 
 
 **### How to install pip (used to install python modules):** 
 
